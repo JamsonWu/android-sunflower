@@ -23,11 +23,16 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+// 这里进行单例实化工厂
 @InstallIn(SingletonComponent::class)
+// 模块类
 @Module
 class NetworkModule {
 
+    // 单例
     @Singleton
+    // 定义如何提供依赖项：这里加注解 @Provides，使用的地方只要 @Inject
+    // 当你需要UnsplashService就调用这个provideUnsplashService方法来创建一个实例
     @Provides
     fun provideUnsplashService(): UnsplashService {
         return UnsplashService.create()

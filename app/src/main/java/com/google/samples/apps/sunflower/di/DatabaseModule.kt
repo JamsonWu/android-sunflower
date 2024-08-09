@@ -27,6 +27,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+// 提供依赖项，消费者只要注入@Inject即可
 @InstallIn(SingletonComponent::class)
 @Module
 class DatabaseModule {
@@ -37,6 +38,7 @@ class DatabaseModule {
         return AppDatabase.getInstance(context)
     }
 
+    // 依赖项是provideAppDatabase提供的
     @Provides
     fun providePlantDao(appDatabase: AppDatabase): PlantDao {
         return appDatabase.plantDao()

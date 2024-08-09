@@ -65,6 +65,7 @@ fun GardenScreen(
     onAddPlantClick: () -> Unit,
     onPlantClick: (PlantAndGardenPlantings) -> Unit
 ) {
+    // 我的花园
     val gardenPlants by viewModel.plantAndGardenPlantings.collectAsStateWithLifecycle()
     GardenScreen(
         gardenPlants = gardenPlants,

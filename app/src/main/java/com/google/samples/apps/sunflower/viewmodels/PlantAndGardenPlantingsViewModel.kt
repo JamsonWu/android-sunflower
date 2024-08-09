@@ -20,11 +20,13 @@ import com.google.samples.apps.sunflower.data.PlantAndGardenPlantings
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+// 这个不是真正的ViewModel,只是一个class对象
 class PlantAndGardenPlantingsViewModel(plantings: PlantAndGardenPlantings) {
     private val plant = checkNotNull(plantings.plant)
     private val gardenPlanting = plantings.gardenPlantings[0]
 
     val waterDateString: String = dateFormat.format(gardenPlanting.lastWateringDate.time)
+    // 定义属性
     val wateringInterval
         get() = plant.wateringInterval
     val imageUrl

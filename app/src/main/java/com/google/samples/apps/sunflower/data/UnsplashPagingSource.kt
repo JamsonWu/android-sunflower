@@ -32,6 +32,7 @@ class UnsplashPagingSource(
         return try {
             val response = service.searchPhotos(query, page, params.loadSize)
             val photos = response.results
+            // 接口请求后将结果传给分页器
             LoadResult.Page(
                 data = photos,
                 prevKey = if (page == UNSPLASH_STARTING_PAGE_INDEX) null else page - 1,

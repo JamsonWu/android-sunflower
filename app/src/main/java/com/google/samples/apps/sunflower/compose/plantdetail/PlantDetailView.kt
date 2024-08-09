@@ -116,6 +116,7 @@ fun PlantDetailsScreen(
     onShareClick: (String) -> Unit,
     onGalleryClick: (Plant) -> Unit,
 ) {
+    // 这里只是取状态值
     val plant = plantDetailsViewModel.plant.observeAsState().value
     val isPlanted = plantDetailsViewModel.isPlanted.collectAsStateWithLifecycle().value
     val showSnackbar = plantDetailsViewModel.showSnackbar.observeAsState().value

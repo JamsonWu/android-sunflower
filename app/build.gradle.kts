@@ -25,6 +25,7 @@ plugins {
 android {
   compileSdk = libs.versions.compileSdk.get().toInt()
 
+  // 配置信息
   defaultConfig {
     applicationId = "com.google.samples.apps.sunflower"
     minSdk = libs.versions.minSdk.get().toInt()

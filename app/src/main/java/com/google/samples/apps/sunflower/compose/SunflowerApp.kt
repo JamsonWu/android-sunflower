@@ -45,16 +45,20 @@ fun SunFlowerNavHost(
 ) {
     val activity = (LocalContext.current as Activity)
     NavHost(navController = navController, startDestination = Screen.Home.route) {
+        // 首页路由
         composable(route = Screen.Home.route) {
             HomeScreen(
                 onPlantClick = {
+                    // 选中植物显示详情
                     navController.navigate(
+                        // 这种表达优雅
                         Screen.PlantDetail.createRoute(
                             plantId = it.plantId
                         )
                     )
                 }
             )
+
         }
         composable(
             route = Screen.PlantDetail.route,

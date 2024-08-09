@@ -44,6 +44,8 @@ fun PlantListScreen(
     modifier: Modifier = Modifier,
     viewModel: PlantListViewModel = hiltViewModel(),
 ) {
+    // LiveData数据流使用observeAsState来搜集数据，当LiveData数据发生变化时，会主动通知要更新
+    // 但都是在生命周期范围内才会通知
     val plants by viewModel.plants.observeAsState(initial = emptyList())
     PlantListScreen(plants = plants, modifier, onPlantClick = onPlantClick)
 }

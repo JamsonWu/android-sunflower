@@ -31,28 +31,34 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// 注入分页数据仓库
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: UnsplashRepository
 ) : ViewModel() {
 
+    // 查询字符串，是植物名称
     private var queryString: String? = savedStateHandle["plantName"]
-
-
+    //
     private val _plantPictures = MutableStateFlow<PagingData<UnsplashPhoto>?>(null)
-    val plantPictures: Flow<PagingData<UnsplashPhoto>> get() = _plantPictures.filterNotNull()
+    // 使用Flow数据源
+    val plantPictures: Flow<PagingData<UnsplashPhoto>>
+        // 返回非空流
+        get() = _plantPictures.filterNotNull()
 
     init {
         refreshData()
     }
 
-
+    // 刷新数据
     fun refreshData() {
-
         viewModelScope.launch {
             try {
-                _plantPictures.value = repository.getSearchResultStream(queryString ?: "").cachedIn(viewModelScope).first()
+                // 更新StateFlow数据
+                _plantPictures.value = repository.getSearchResultStream(queryString ?: "")
+                    .cachedIn(viewModelScope)
+                    .first()
             } catch (e: Exception) {
                 e.printStackTrace()
             }

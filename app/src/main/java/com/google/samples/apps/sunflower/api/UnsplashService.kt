@@ -24,37 +24,49 @@ import okhttp3.logging.HttpLoggingInterceptor.Level
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 /**
  * Used to connect to the Unsplash API to fetch photos
+ * Api接口定义
  */
 interface UnsplashService {
 
+    // 接口上下文地址
     @GET("search/photos")
     suspend fun searchPhotos(
+        // query 查询条件
         @Query("query") query: String,
+        // 第几页
         @Query("page") page: Int,
+        // 每页多少条
         @Query("per_page") perPage: Int,
+
         @Query("client_id") clientId: String = BuildConfig.UNSPLASH_ACCESS_KEY
     ): UnsplashSearchResponse
 
+    // 内联对象
     companion object {
-        private const val BASE_URL = "https://api.unsplash.com/"
-
+        // 接口地址
+        // private const val BASE_URL = "https://api.unsplash.com/"
+        // 创建接口
         fun create(): UnsplashService {
-            val logger = HttpLoggingInterceptor().apply { level = Level.BASIC }
-
-            val client = OkHttpClient.Builder()
-                .addInterceptor(logger)
-                .build()
-
-            return Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(UnsplashService::class.java)
+            // 日志
+            //    val logger = HttpLoggingInterceptor().apply { level = Level.BASIC }
+            //    // 这里是client
+            //    val client = OkHttpClient.Builder()
+            //        .addInterceptor(logger)
+            //        .build()
+            //
+            //    // 实例化接口请求实例
+            //    return Retrofit.Builder()
+            //        .baseUrl(BASE_URL)
+            //        .client(client)
+            //        .addConverterFactory(GsonConverterFactory.create())
+            //        .build()
+            //        .create(UnsplashService::class.java)
+            return Request<UnsplashService>().create(UnsplashService::class.java)
         }
     }
 }

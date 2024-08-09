@@ -32,13 +32,20 @@ import com.google.samples.apps.sunflower.workers.SeedDatabaseWorker.Companion.KE
 
 /**
  * The Room database for this app
+ * Room 管理 Sqlite 数据库
+ * entities 指定数据库有哪些表
  */
 @Database(entities = [GardenPlanting::class, Plant::class], version = 1, exportSchema = false)
+// 指定类型转换器
 @TypeConverters(Converters::class)
+// RoomDatabase是Room数据库的抽象类
 abstract class AppDatabase : RoomDatabase() {
+    // 提供操作花园植物表的Dao
     abstract fun gardenPlantingDao(): GardenPlantingDao
+    // 提供操作植物表的Dao
     abstract fun plantDao(): PlantDao
 
+    // 内联对象
     companion object {
 
         // For Singleton instantiation
@@ -53,11 +60,14 @@ abstract class AppDatabase : RoomDatabase() {
         // Create and pre-populate the database. See this article for more details:
         // https://medium.com/google-developers/7-pro-tips-for-room-fbadea4bfbd1#4785
         private fun buildDatabase(context: Context): AppDatabase {
+
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
                 .addCallback(
                     object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
+                            // 在数据库构建后的回调中添加 WorkManger
+                            // 添加一个作业任务，读取本地assets下的json文件数据保存到本地数据库中
                             val request = OneTimeWorkRequestBuilder<SeedDatabaseWorker>()
                                     .setInputData(workDataOf(KEY_FILENAME to PLANT_DATA_FILENAME))
                                     .build()

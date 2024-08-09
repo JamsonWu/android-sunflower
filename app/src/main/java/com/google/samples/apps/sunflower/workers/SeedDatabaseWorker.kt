@@ -36,14 +36,21 @@ class SeedDatabaseWorker(
         try {
             val filename = inputData.getString(KEY_FILENAME)
             if (filename != null) {
+                // 使用applicationContext.assets.open打开JSON文件
+                // 读取本地assets目录下的文件
                 applicationContext.assets.open(filename).use { inputStream ->
+                    // JSON数据读取器
                     JsonReader(inputStream.reader()).use { jsonReader ->
+                        // 这是kotlin对java内部类型的一种实现：object : TypeToken<List<Plant>>() {}
+                        // 其中TypeToken是java代码
                         val plantType = object : TypeToken<List<Plant>>() {}.type
+                        // 从JSON中读取数据到列表中
                         val plantList: List<Plant> = Gson().fromJson(jsonReader, plantType)
-
+                        // 获取数据库实例
                         val database = AppDatabase.getInstance(applicationContext)
+                        // 更新数据表
                         database.plantDao().upsertAll(plantList)
-
+                        //
                         Result.success()
                     }
                 }

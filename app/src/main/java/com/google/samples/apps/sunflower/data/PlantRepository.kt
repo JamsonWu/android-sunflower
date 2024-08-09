@@ -24,12 +24,16 @@ import javax.inject.Singleton
  *
  * Collecting from the Flows in [PlantDao] is main-safe.  Room supports Coroutines and moves the
  * query execution off of the main thread.
+ * ViewModel中操作数据库的仓库
+ * 这里需要依赖注入PlantDao接口，在哪里提供依赖项呢？在DatabaseModule中配置依赖项如何生成的
  */
 @Singleton
 class PlantRepository @Inject constructor(private val plantDao: PlantDao) {
 
+    // 获取植物列表
     fun getPlants() = plantDao.getPlants()
 
+    // 获取单棵植物
     fun getPlant(plantId: String) = plantDao.getPlant(plantId)
 
     fun getPlantsWithGrowZoneNumber(growZoneNumber: Int) =

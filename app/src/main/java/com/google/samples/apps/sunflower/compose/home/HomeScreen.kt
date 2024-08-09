@@ -57,10 +57,13 @@ import com.google.samples.apps.sunflower.ui.SunflowerTheme
 import com.google.samples.apps.sunflower.viewmodels.PlantListViewModel
 import kotlinx.coroutines.launch
 
+// Tab页配置
+// 枚举类定义要求有2个参数
 enum class SunflowerPage(
     @StringRes val titleResId: Int,
     @DrawableRes val drawableResId: Int
 ) {
+    // 以下定义2个TAB页，定义枚举常量时需要传递枚举类定义的2个参数
     MY_GARDEN(R.string.my_garden_title, R.drawable.ic_my_garden_active),
     PLANT_LIST(R.string.plant_list_title, R.drawable.ic_plant_list_active)
 }
@@ -73,12 +76,15 @@ fun HomeScreen(
     viewModel: PlantListViewModel = hiltViewModel(),
     pages: Array<SunflowerPage> = SunflowerPage.values()
 ) {
+    // 页面状态
     val pagerState = rememberPagerState(pageCount = { pages.size })
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
+            // 顶部菜单
             HomeTopAppBar(
                 pagerState = pagerState,
                 onFilterClick = { viewModel.updateData() },
@@ -107,13 +113,18 @@ fun HomePagerScreen(
         val coroutineScope = rememberCoroutineScope()
 
         // Tab Row
+        // Tab 页
         TabRow(
+            // 当前选中TAB标签，当pagerState发生改变时，选中的TAB页也会发生改变
             selectedTabIndex = pagerState.currentPage
         ) {
+            // 遍历 pages 创建 Tab菜单
             pages.forEachIndexed { index, page ->
                 val title = stringResource(id = page.titleResId)
                 Tab(
+                    // 初始化设置选中的TAB页
                     selected = pagerState.currentPage == index,
+                    // 点击TAB页时，以动画形式，滚动到指定TAB页
                     onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
                     text = { Text(text = title) },
                     icon = {
@@ -127,13 +138,16 @@ fun HomePagerScreen(
             }
         }
 
-        // Pages
+        // Pages，水平分页器
         HorizontalPager(
             modifier = Modifier.background(MaterialTheme.colorScheme.background),
             state = pagerState,
             verticalAlignment = Alignment.Top
-        ) { index ->
+        ) {
+            // 当水平滚动时，页面索引发生变化时会触发 pageContent 的改变
+            index ->
             when (pages[index]) {
+                // 我的花园
                 SunflowerPage.MY_GARDEN -> {
                     GardenScreen(
                         Modifier.fillMaxSize(),
@@ -146,13 +160,14 @@ fun HomePagerScreen(
                             onPlantClick(it.plant)
                         })
                 }
-
+                // 植物列表
                 SunflowerPage.PLANT_LIST -> {
                     PlantListScreen(
                         onPlantClick = onPlantClick,
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
+
             }
         }
     }
@@ -166,6 +181,7 @@ private fun HomeTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier
 ) {
+    // 顶部菜单
     CenterAlignedTopAppBar(
         title = {
                 Text(
@@ -174,7 +190,9 @@ private fun HomeTopAppBar(
                 )
         },
         modifier = modifier,
+        // 可以加动作按钮，默认靠右边布局
         actions = {
+            //  SunflowerPage.PLANT_LIST.ordinal 返回枚举常量对应的序号
             if (pagerState.currentPage == SunflowerPage.PLANT_LIST.ordinal) {
                 IconButton(onClick = onFilterClick) {
                     Icon(
@@ -185,6 +203,7 @@ private fun HomeTopAppBar(
                     )
                 }
             }
+
         },
         scrollBehavior = scrollBehavior
     )

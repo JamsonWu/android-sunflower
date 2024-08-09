@@ -26,6 +26,11 @@ import com.google.gson.annotations.SerializedName
  * [here](https://unsplash.com/documentation#search-photos).
  */
 data class UnsplashSearchResponse(
-    @field:SerializedName("results") val results: List<UnsplashPhoto>,
-    @field:SerializedName("total_pages") val totalPages: Int
+    // 注解标识对应哪个字段：results是JSON中的字段
+    // 接口JSON中的字段与代码字段进行映射，如果相同可以不用映射
+    @field:SerializedName("results")
+    val results: List<UnsplashPhoto>,
+    // 注解标识对应哪个字段，total_pages 总页数也是JSON字段
+    @field:SerializedName("total_pages")
+    val totalPages: Int
 )

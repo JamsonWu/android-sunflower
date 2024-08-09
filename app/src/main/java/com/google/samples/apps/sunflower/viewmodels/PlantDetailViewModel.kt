@@ -41,22 +41,27 @@ class PlantDetailViewModel @Inject constructor(
     private val gardenPlantingRepository: GardenPlantingRepository,
 ) : ViewModel() {
 
+    // 获取植物ID
     val plantId: String = savedStateHandle.get<String>(PLANT_ID_SAVED_STATE_KEY)!!
 
+    // StateFlow流，从Flow转换过来
     val isPlanted = gardenPlantingRepository.isPlanted(plantId)
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5000),
             false
         )
+    // LiveData数据
     val plant = plantRepository.getPlant(plantId).asLiveData()
 
+    // 可观察状态
     private val _showSnackbar = MutableLiveData(false)
     val showSnackbar: LiveData<Boolean>
         get() = _showSnackbar
 
     fun addPlantToGarden() {
         viewModelScope.launch {
+            // 创建花园植物
             gardenPlantingRepository.createGardenPlanting(plantId)
             _showSnackbar.value = true
         }

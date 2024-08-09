@@ -35,6 +35,7 @@ interface PlantDao {
     @Query("SELECT * FROM plants WHERE id = :plantId")
     fun getPlant(plantId: String): Flow<Plant>
 
+    // 根据主键id判断，如果不存在，则新增，否则更新
     @Upsert
     suspend fun upsertAll(plants: List<Plant>)
 }

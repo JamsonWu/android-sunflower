@@ -25,26 +25,33 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * The Data Access Object for the [GardenPlanting] class.
+ * 操作花园植物表的Dao
  */
 @Dao
 interface GardenPlantingDao {
+    // 数据读取
     @Query("SELECT * FROM garden_plantings")
     fun getGardenPlantings(): Flow<List<GardenPlanting>>
 
+    // 根据植物idu判断是否存在这个植物
     @Query("SELECT EXISTS(SELECT 1 FROM garden_plantings WHERE plant_id = :plantId LIMIT 1)")
     fun isPlanted(plantId: String): Flow<Boolean>
 
     /**
      * This query will tell Room to query both the [Plant] and [GardenPlanting] tables and handle
      * the object mapping.
+     * GET为啥要用事务？
+     * 获取我的花园的植物列表
      */
     @Transaction
     @Query("SELECT * FROM plants WHERE id IN (SELECT DISTINCT(plant_id) FROM garden_plantings)")
     fun getPlantedGardens(): Flow<List<PlantAndGardenPlantings>>
 
+    // 给我花园添加一棵植物
     @Insert
     suspend fun insertGardenPlanting(gardenPlanting: GardenPlanting): Long
 
+    // 删除我花园的一棵植物
     @Delete
     suspend fun deleteGardenPlanting(gardenPlanting: GardenPlanting)
 }

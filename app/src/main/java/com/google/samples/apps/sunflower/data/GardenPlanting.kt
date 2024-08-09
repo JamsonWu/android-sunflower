@@ -33,28 +33,36 @@ import java.util.Calendar
  */
 @Entity(
     tableName = "garden_plantings",
+    // 定义父子表关系，外键
     foreignKeys = [
+        // 外键首先指定子表，然后指定父字段与子字段
         ForeignKey(entity = Plant::class, parentColumns = ["id"], childColumns = ["plant_id"])
     ],
     indices = [Index("plant_id")]
 )
 data class GardenPlanting(
+    // @ColumnInfo用于列映射，表字段为 plant_id映射为 plantId
     @ColumnInfo(name = "plant_id") val plantId: String,
 
     /**
      * Indicates when the [Plant] was planted. Used for showing notification when it's time
      * to harvest the plant.
+     * 种植日期
      */
     @ColumnInfo(name = "plant_date") val plantDate: Calendar = Calendar.getInstance(),
 
     /**
      * Indicates when the [Plant] was last watered. Used for showing notification when it's
      * time to water the plant.
+     * 最后浇水日期
      */
     @ColumnInfo(name = "last_watering_date")
     val lastWateringDate: Calendar = Calendar.getInstance()
 ) {
+    // 定义主键字段为自增
     @PrimaryKey(autoGenerate = true)
+    // 表字段名为id
     @ColumnInfo(name = "id")
+    // UI访问字段别名为gardenPlantingId，Long类型
     var gardenPlantingId: Long = 0
 }

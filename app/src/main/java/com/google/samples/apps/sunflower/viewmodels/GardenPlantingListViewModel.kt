@@ -26,10 +26,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
+
+// 依赖注入
 @HiltViewModel
 class GardenPlantingListViewModel @Inject internal constructor(
     gardenPlantingRepository: GardenPlantingRepository
 ) : ViewModel() {
+    // 从数据库读取种植记录
     val plantAndGardenPlantings: StateFlow<List<PlantAndGardenPlantings>> =
         gardenPlantingRepository
             .getPlantedGardens()

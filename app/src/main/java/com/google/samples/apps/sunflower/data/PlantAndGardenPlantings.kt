@@ -27,6 +27,7 @@ data class PlantAndGardenPlantings(
     @Embedded
     val plant: Plant,
 
+    // 植物关联种植最后浇水日期
     @Relation(parentColumn = "id", entityColumn = "plant_id")
     val gardenPlantings: List<GardenPlanting> = emptyList()
 )

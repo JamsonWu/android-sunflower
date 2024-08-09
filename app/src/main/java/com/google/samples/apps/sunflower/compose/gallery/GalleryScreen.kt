@@ -67,6 +67,7 @@ fun GalleryScreen(
         plantPictures = viewModel.plantPictures,
         onPhotoClick = onPhotoClick,
         onUpClick = onUpClick,
+        // 引用 viewModel的方法 refreshData，等价于 { viewModel.refreshData()}
         onPullToRefresh = viewModel::refreshData,
     )
 }
@@ -84,13 +85,16 @@ private fun GalleryScreen(
         },
     ) { padding ->
 
+        //  下拉刷新状态
         val pullToRefreshState = rememberPullToRefreshState()
 
         if (pullToRefreshState.isRefreshing) {
+            // 重新刷新数据
             onPullToRefresh()
         }
 
         val pagingItems: LazyPagingItems<UnsplashPhoto> =
+            // 分页数据
             plantPictures.collectAsLazyPagingItems()
 
         LaunchedEffect(pagingItems.loadState) {
@@ -122,6 +126,7 @@ private fun GalleryScreen(
                 }
             }
 
+            // 下拉刷新指示器
             PullToRefreshContainer(
                 modifier = Modifier.align(Alignment.TopCenter),
                 state = pullToRefreshState
